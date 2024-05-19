@@ -12,6 +12,7 @@ fun main() {
 
     val dictionaryFile = File("dictionary.txt")
     val dictionary: MutableList<Word> = mutableListOf()
+
     val lines: List<String> = dictionaryFile.readLines()
 
     for (line in lines) {
@@ -24,7 +25,27 @@ fun main() {
         println("Меню: 1 – Учить слова, 2 – Статистика, 0 – Выход")
 
         when (readln().toInt()) {
-            1 -> println("В разработке...")
+            1 -> {
+                while (dictionary.filter { it.correctAnswersCount < 3 }.isNotEmpty()) {
+                    val notLearnedWords = dictionary.filter { it.correctAnswersCount < 3 }
+                    val wordToLearn = notLearnedWords.random()
+                    val answerWords = notLearnedWords.filterNot { it == wordToLearn }.shuffled().take(4)
+
+                    println(wordToLearn)
+                    println(answerWords)
+
+                    when (readln().toInt()) {
+                        0 -> break
+                        else -> println("Не корректный выбор")
+                    }
+
+
+                }
+
+                println("Вы выучили все слова")
+
+            }
+
             2 -> {
                 val learnedWord = dictionary.filter { it.correctAnswersCount >= 3 }.size
                 val numberOfWords = dictionary.size

@@ -39,10 +39,9 @@ fun main() {
                         else -> println("Не корректный выбор")
                     }
 
-
                 }
 
-                println("Вы выучили все слова")
+                if (dictionary.filter { it.correctAnswersCount < 3 }.isEmpty()) println("Вы выучили все слова")
 
             }
 

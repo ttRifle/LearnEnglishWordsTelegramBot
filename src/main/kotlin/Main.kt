@@ -28,8 +28,8 @@ fun main() {
             1 -> {
                 while (dictionary.filter { it.correctAnswersCount < 3 }.isNotEmpty()) {
                     val notLearnedWords = dictionary.filter { it.correctAnswersCount < 3 }
-                    val wordToLearn = notLearnedWords.random()
-                    val answerWords = notLearnedWords.filterNot { it == wordToLearn }.shuffled().take(4)
+                    val answerWords = notLearnedWords.shuffled().take(4)
+                    val wordToLearn = answerWords.random()
 
                     println(wordToLearn)
                     println(answerWords)

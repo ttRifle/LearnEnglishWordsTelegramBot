@@ -17,8 +17,10 @@ fun main() {
 
     for (line in lines) {
         val listOfLine = line.split("|")
-        dictionary.add(Word(listOfLine[0], listOfLine[1], listOfLine[2].toInt() ?: 0))
+        dictionary.add(Word(listOfLine[0], listOfLine[1], listOfLine[2].toIntOrNull() ?: 0))
     }
+
+    val learnedWords = dictionary.filter { it.correctAnswersCount >= CORRECT_ANSWERS_TO_LEARN }
 
     while (true) {
 
@@ -31,8 +33,13 @@ fun main() {
 
                 while (notLearnedWords.isNotEmpty()) {
 
-                    val answerWords = notLearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS)
+                    val answerWords = notLearnedWords.shuffled().take(NUMBER_OF_ANSWER_OPTIONS).toMutableList()
+
                     val wordToLearn = answerWords.random()
+
+                    if (answerWords.size < NUMBER_OF_ANSWER_OPTIONS) answerWords += learnedWords.shuffled().take(
+                        NUMBER_OF_ANSWER_OPTIONS - answerWords.size
+                    )
 
                     println(wordToLearn.original)
                     println(answerWords.joinToString { (answerWords.indexOf(it) + 1).toString() + " - " + it.translate })
@@ -50,11 +57,11 @@ fun main() {
 
             2 -> {
 
-                val learnedWord = dictionary.filter { it.correctAnswersCount >= 3 }.size
+                val numberOfLearnedWords = learnedWords.size
                 val numberOfWords = dictionary.size
-                val percentOfLearnedWords = (learnedWord.toDouble() / numberOfWords.toDouble() * 100).toInt()
+                val percentOfLearnedWords = (numberOfLearnedWords.toDouble() / numberOfWords.toDouble() * 100).toInt()
 
-                println("Выучено $learnedWord из $numberOfWords слов | $percentOfLearnedWords%")
+                println("Выучено $numberOfLearnedWords из $numberOfWords слов | $percentOfLearnedWords%")
 
             }
 
